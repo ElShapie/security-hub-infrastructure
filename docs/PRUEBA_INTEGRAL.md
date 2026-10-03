@@ -5,6 +5,10 @@
 - [ ] Las VM tienen hora UTC sincronizada y direcciones reservadas.
 - [ ] Los switches muestran un solo trunk entre ellos.
 - [ ] Los puertos access están en la VLAN prevista.
+- [ ] Dirección, RR. HH., Seguridad Física y Auditoría están en VLAN 30.
+- [ ] TI e IAM están en VLAN 10.
+- [ ] SOC está en VLAN 60.
+- [ ] Lectores y cámaras están en VLAN 40, no las laptops de Seguridad Física.
 - [ ] Invitados no alcanzan redes internas.
 - [ ] El Hub responde por HTTPS con certificado confiable.
 - [ ] Los puertos internos 8000, SQLite, Docker y RTSP no están publicados.

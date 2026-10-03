@@ -15,7 +15,23 @@ Si alguno no es administrable, usa el escenario plano al final de esta guía. No
 | 30 | Usuarios | `10.31.30.0/24` | `10.31.30.1` | Laptops de áreas y SOC |
 | 40 | Cámaras e IoT | `10.31.40.0/24` | `10.31.40.1` | Teléfonos-cámara y lector RFID |
 | 50 | Invitados | `10.31.50.0/24` | `10.31.50.1` | Equipos sin participación operativa |
+| 60 | SOC | `10.31.60.0/24` | `10.31.60.1` | Analistas y responsable del SOC |
 | 999 | Nativa sin uso | Sin DHCP | Sin gateway | Troncales; no conectar clientes |
+
+## VLAN asignada a cada área
+
+| Área | VLAN principal | Equipos incluidos | Motivo |
+|---|---:|---|---|
+| Dirección | 30 Usuarios | Laptops de Dirección | Solo utiliza el Hub y reportes; no administra red ni servidores |
+| RR. HH. | 30 Usuarios | Laptops de RR. HH. | Solicitudes y ciclo de altas/bajas mediante aplicaciones autorizadas |
+| TI | 10 Administración | Laptops administrativas de TI | Administra switches, router, hipervisor, Hub y NVR |
+| IAM | 10 Administración | Laptops usadas para OneLogin, SCIM y MFA | Requiere acceso administrativo controlado a identidad y Hub |
+| SOC | 60 SOC | Laptops de analistas y responsable SOC | Necesita consultar eventos, Hub y NVR sin recibir permisos de administración de red |
+| Seguridad Física | 30 Usuarios | Laptops de los operadores | Administra tarjetas desde HTTPS; no debe trabajar dentro de la red IoT |
+| Seguridad Física: dispositivos | 40 Cámaras e IoT | Lector RFID/NFC, controlador y teléfonos-cámara | Los dispositivos quedan aislados de las laptops y solo llegan a servicios autorizados |
+| Auditoría | 30 Usuarios | Laptops de Auditoría | Acceso de consulta y evidencias, sin administración de infraestructura |
+
+La pertenencia a una VLAN no concede permisos en la aplicación. OneLogin y el rol efectivo del Security Hub siguen controlando las acciones de cada persona. TI e IAM comparten VLAN 10 por su función administrativa, pero deben usar cuentas distintas y privilegios mínimos.
 
 Direcciones reservadas:
 
@@ -37,8 +53,9 @@ La política inicial es denegar tráfico entre VLAN y abrir únicamente lo neces
 | Origen | Destino | Permitir | Motivo |
 |---|---|---|---|
 | Administración | Servidores | HTTPS, SSH solo TI | Administración y soporte |
-| Usuarios | Hub | TCP 443 | Interfaz operativa |
-| SOC autorizado | NVR | TCP 8971 | Consulta de video |
+| Usuarios | Hub | TCP 443 | Interfaz operativa para Dirección, RR. HH., Seguridad Física y Auditoría |
+| SOC | Hub | TCP 443 | Eventos e incidentes |
+| SOC | NVR | TCP 8971 | Consulta de video |
 | Lector RFID | Hub | TCP 443 | Decisión de acceso |
 | NVR | Cámaras | Puertos RTSP/HTTP configurados | Captura de video |
 | Cámaras | NVR | Respuestas establecidas | Transmisión iniciada por NVR |
@@ -51,7 +68,7 @@ No publiques SQLite, RTSP, SSH, Docker ni el puerto interno 8000. Caddy es el ú
 
 ## Configuración de troncales
 
-- Router hacia Switch 1: trunk, VLAN 10/20/30/40/50 etiquetadas, VLAN nativa 999.
+- Router hacia Switch 1: trunk, VLAN 10/20/30/40/50/60 etiquetadas, VLAN nativa 999.
 - Switch 1 hacia Switch 2: un solo trunk con las mismas VLAN.
 - No conectes un segundo cable entre switches salvo que ambos estén configurados para LACP; de lo contrario puede crearse un bucle.
 - Puertos de clientes: access/untagged en una sola VLAN.
@@ -64,9 +81,10 @@ El diseño completo requiere SSID separados y VLAN:
 
 | SSID | VLAN | Uso |
 |---|---:|---|
-| `LAB-USUARIOS` | 30 | Laptops participantes |
+| `LAB-USUARIOS` | 30 | Dirección, RR. HH., Seguridad Física y Auditoría |
 | `LAB-CAMARAS` | 40 | Teléfonos usados como cámaras |
 | `LAB-INVITADOS` | 50 | Equipos fuera del escenario |
+| `LAB-SOC` | 60 | Analistas SOC cuando trabajen por Wi-Fi |
 
 Activa aislamiento de clientes en Invitados. En Cámaras, no actives aislamiento si impide que el NVR alcance los teléfonos. Usa claves distintas y no publiques la contraseña de administración del AP.
 
