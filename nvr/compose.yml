@@ -1,0 +1,23 @@
+services:
+  frigate:
+    container_name: identity-access-lab-nvr
+    image: ghcr.io/blakeblackshear/frigate:0.17.1
+    restart: unless-stopped
+    stop_grace_period: 30s
+    shm_size: "256mb"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./config:/config
+      - ./media:/media/frigate
+      - ./certs:/etc/letsencrypt/live/frigate:ro
+      - type: tmpfs
+        target: /tmp/cache
+        tmpfs:
+          size: 268435456
+    ports:
+      - "10.31.0.20:8971:8971"
+    environment:
+      FRIGATE_CAM_ANDROID_USER: ${FRIGATE_CAM_ANDROID_USER}
+      FRIGATE_CAM_ANDROID_PASSWORD: ${FRIGATE_CAM_ANDROID_PASSWORD}
+      FRIGATE_CAM_IPHONE_USER: ${FRIGATE_CAM_IPHONE_USER}
+      FRIGATE_CAM_IPHONE_PASSWORD: ${FRIGATE_CAM_IPHONE_PASSWORD}

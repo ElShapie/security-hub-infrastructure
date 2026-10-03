@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block body %}
+<aside class="sidebar">
+  <div><span class="eyebrow">Consola operativa</span><h2>Security Hub</h2></div>
+  <nav><a class="active" href="/">Resumen</a><a href="#infraestructura">Infraestructura</a><a href="/control-acceso">Personas y tarjetas</a><a href="#accesos">Acceso físico</a><a href="/hub">SOC e incidentes</a>{% if camera_url %}<a href="{{ camera_url }}" target="_blank" rel="noopener">Videovigilancia</a>{% endif %}</nav>
+  <div class="account"><strong>{{ user.externalId or user.userName }}</strong><span>{{ current_role }}</span><form action="/logout" method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="link-button">Cerrar sesión</button></form></div>
+</aside>
+<main class="main">
+  <header class="topbar"><div><span class="eyebrow">Operación en tiempo real</span><h1>Estado general</h1></div><span class="chip ok">OneLogin activo</span></header>
+  <section class="metrics">
+    <article class="metric"><span>Identidades activas</span><strong>{{ metrics.users_active }}</strong></article>
+    <article class="metric"><span>Servicios disponibles</span><strong>{{ metrics.devices_online }}/{{ metrics.devices_total }}</strong></article>
+    <article class="metric"><span>Accesos denegados hoy</span><strong>{{ metrics.denied_today }}</strong></article>
+    <article class="metric"><span>Incidentes abiertos</span><strong>{{ metrics.incidents_open }}</strong></article>
+  </section>
+
+  <section class="panel" id="infraestructura">
+    <div class="section-head"><div><span class="eyebrow">TI</span><h2>Infraestructura</h2></div><span class="chip">Modo {{ state.mode }}</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Servicio</th><th>Tipo</th><th>Dirección</th><th>Estado</th><th>Actualizado UTC</th></tr></thead><tbody>
+    {% for device in devices %}<tr><td>{{ device.name }}</td><td>{{ device.kind }}</td><td>{{ device.address or '—' }}</td><td><span class="chip {{ 'ok' if device.status == 'online' else 'warn' }}">{{ device.status }}</span></td><td>{{ device.updated_at }}</td></tr>{% else %}<tr><td colspan="5" class="empty">Registra el primer servicio operativo.</td></tr>{% endfor %}
+    </tbody></table></div>
+    {% if current_role in ['admin','ti'] %}<form class="compact-form" action="/inventario" method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><label>Nombre<input name="name" required maxlength="80"></label><label>Tipo<select name="kind"><option value="aplicacion">Aplicación</option><option value="base_datos">Base de datos</option><option value="lector_rfid">Lector RFID</option><option value="camara">Cámara</option><option value="nvr">NVR</option><option value="red">Red</option></select></label><label>Dirección<input name="address" maxlength="120" placeholder="Nombre o IP interna"></label><label>Estado<select name="status"><option value="online">Disponible</option><option value="offline">Fuera de línea</option><option value="mantenimiento">Mantenimiento</option></select></label><button class="button primary">Registrar servicio</button></form>{% endif %}
+  </section>
+
+  <section class="split">
+    <article class="panel" id="accesos"><div class="section-head"><div><span class="eyebrow">Seguridad física</span><h2>Últimos accesos</h2></div></div><div class="event-list">{% for event in access_events %}<div class="event"><span class="event-dot {{ 'ok' if event.result == 'PERMITIDO' else 'danger' }}"></span><div><strong>{{ event.credential }}</strong><p>{{ event.movement }} · {{ event.reader }}</p></div><time>{{ event.time }}</time></div>{% else %}<p class="empty">Aún no se han recibido eventos RFID.</p>{% endfor %}</div></article>
+    <article class="panel"><div class="section-head"><div><span class="eyebrow">SOC</span><h2>Incidentes</h2></div><a href="/hub">Ver centro SOC</a></div><div class="event-list">{% for incident in incidents[:8] %}<div class="event"><span class="event-dot {{ 'danger' if incident.severity in ['alta','critica'] else 'warn' }}"></span><div><strong>{{ incident.title }}</strong><p>{{ incident.severity }} · {{ incident.status }}</p></div><time>{{ incident.opened_at }}</time></div>{% else %}<p class="empty">No hay incidentes registrados.</p>{% endfor %}</div>{% if current_role in ['admin','soc'] %}<form class="stack-form" action="/incidentes" method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><label>Título<input name="title" required maxlength="120"></label><label>Severidad<select name="severity"><option value="baja">Baja</option><option value="media">Media</option><option value="alta">Alta</option><option value="critica">Crítica</option></select></label><label>Resumen<textarea name="summary" maxlength="1000"></textarea></label><button class="button primary">Abrir incidente</button></form>{% endif %}</article>
+  </section>
+</main>
+{% endblock %}

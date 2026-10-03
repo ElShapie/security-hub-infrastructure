@@ -1,0 +1,39 @@
+mqtt:
+  enabled: false
+detect:
+  enabled: false
+record:
+  enabled: true
+  continuous:
+    days: 1
+cameras:
+  entrada:
+    ffmpeg:
+      inputs:
+        - path: "http://{FRIGATE_CAM_ANDROID_USER}:{FRIGATE_CAM_ANDROID_PASSWORD}@10.31.0.31:8080/video"
+          input_args: preset-http-mjpeg-generic
+          roles:
+            - detect
+            - record
+      output_args:
+        record: preset-record-mjpeg
+    detect:
+      enabled: false
+      width: 640
+      height: 480
+      fps: 5
+  interior:
+    ffmpeg:
+      inputs:
+        - path: "rtsp://{FRIGATE_CAM_IPHONE_USER}:{FRIGATE_CAM_IPHONE_PASSWORD}@10.31.0.32:8554/REEMPLAZAR_RUTA_REAL"
+          input_args: preset-rtsp-generic
+          roles:
+            - detect
+            - record
+      output_args:
+        record: preset-record-generic
+    detect:
+      enabled: false
+      width: 640
+      height: 480
+      fps: 5

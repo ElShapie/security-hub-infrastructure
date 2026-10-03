@@ -1,0 +1,11 @@
+{
+  "schemas": ["urn:scim:schemas:core:1.0"],
+  "userName": "{$parameters.scimusername}",
+  "name": {
+    "givenName": "{$user.firstname}",
+    "familyName": "{$user.lastname}",
+    "formatted": "{$user.display_name}"
+  },
+  "title": "{$parameters.lab_role}",
+  "externalId": "{$parameters.emp_id}"
+}
