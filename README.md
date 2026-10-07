@@ -41,3 +41,7 @@ Los secretos se generan en el runtime. Este repositorio no debe contener `.env`,
 - [Puertos de los switches](diagramas/04_PUERTOS_SWITCHES.md)
 
 Los diagramas muestran el diseño objetivo con equipos administrables. Si el hardware no soporta VLAN, usa el escenario alternativo documentado y declara esa limitación en la presentación.
+
+## Diligencias actualizadas
+
+La asignación técnica por EMP, las rutas de coordinación y el registro mínimo de cada cambio están en [docs/DILIGENCIAS_POR_AREA.md](docs/DILIGENCIAS_POR_AREA.md).
