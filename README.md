@@ -24,6 +24,7 @@ Repositorio privado para desplegar la infraestructura operativa del laboratorio.
 | `diagramas/` | Topología física, VLAN y flujos, editables en Mermaid |
 | `docs/` | Instalación, operación, direccionamiento, ACL y pruebas |
 | `scripts/` | Preparación segura del runtime fuera del repositorio |
+| `packet-tracer/` | Topología Cisco, configuraciones, ACL, direccionamiento y guía de montaje |
 
 ## Preparar una copia operativa
 
@@ -39,6 +40,7 @@ Los secretos se generan en el runtime. Este repositorio no debe contener `.env`,
 - [Segmentación VLAN](diagramas/02_VLANS_Y_SUBREDES.md)
 - [Flujos permitidos](diagramas/03_FLUJOS_DE_SEGURIDAD.md)
 - [Puertos de los switches](diagramas/04_PUERTOS_SWITCHES.md)
+- [Maqueta Cisco Packet Tracer](packet-tracer/README.md)
 
 Los diagramas muestran el diseño objetivo con equipos administrables. Si el hardware no soporta VLAN, usa el escenario alternativo documentado y declara esa limitación en la presentación.
 

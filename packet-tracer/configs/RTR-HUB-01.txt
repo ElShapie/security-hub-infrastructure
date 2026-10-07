@@ -1,0 +1,128 @@
+enable
+configure terminal
+hostname RTR-HUB-01
+no ip domain-lookup
+service password-encryption
+banner motd ^CAcceso exclusivo al laboratorio autorizado.^C
+ip domain-name security-hub.lab
+username netadmin privilege 15 secret Cambiar-En-Primera-Practica-2026
+crypto key generate rsa modulus 1024
+ip ssh version 2
+
+interface gigabitEthernet0/1
+ description TRUNK_SW-CORE-01_G0-1
+ no ip address
+ no shutdown
+interface gigabitEthernet0/1.10
+ encapsulation dot1Q 10
+ ip address 10.31.10.1 255.255.255.0
+interface gigabitEthernet0/1.20
+ encapsulation dot1Q 20
+ ip address 10.31.20.1 255.255.255.0
+interface gigabitEthernet0/1.30
+ encapsulation dot1Q 30
+ ip address 10.31.30.1 255.255.255.0
+ ip access-group USERS-IN in
+interface gigabitEthernet0/1.40
+ encapsulation dot1Q 40
+ ip address 10.31.40.1 255.255.255.0
+ ip access-group IOT-IN in
+interface gigabitEthernet0/1.50
+ encapsulation dot1Q 50
+ ip address 10.31.50.1 255.255.255.0
+ ip access-group GUESTS-IN in
+interface gigabitEthernet0/1.60
+ encapsulation dot1Q 60
+ ip address 10.31.60.1 255.255.255.0
+ ip access-group SOC-IN in
+interface gigabitEthernet0/1.999
+ encapsulation dot1Q 999 native
+ no ip address
+
+ip dhcp excluded-address 10.31.10.1 10.31.10.99
+ip dhcp excluded-address 10.31.10.200 10.31.10.254
+ip dhcp excluded-address 10.31.20.1 10.31.20.99
+ip dhcp excluded-address 10.31.20.200 10.31.20.254
+ip dhcp excluded-address 10.31.30.1 10.31.30.99
+ip dhcp excluded-address 10.31.30.200 10.31.30.254
+ip dhcp excluded-address 10.31.40.1 10.31.40.99
+ip dhcp excluded-address 10.31.40.200 10.31.40.254
+ip dhcp excluded-address 10.31.50.1 10.31.50.99
+ip dhcp excluded-address 10.31.50.200 10.31.50.254
+ip dhcp excluded-address 10.31.60.1 10.31.60.99
+ip dhcp excluded-address 10.31.60.200 10.31.60.254
+
+ip dhcp pool ADMIN
+ network 10.31.10.0 255.255.255.0
+ default-router 10.31.10.1
+ dns-server 10.31.20.10
+ domain-name security-hub.lab
+ip dhcp pool SERVERS
+ network 10.31.20.0 255.255.255.0
+ default-router 10.31.20.1
+ dns-server 10.31.20.10
+ domain-name security-hub.lab
+ip dhcp pool USERS
+ network 10.31.30.0 255.255.255.0
+ default-router 10.31.30.1
+ dns-server 10.31.20.10
+ domain-name security-hub.lab
+ip dhcp pool CCTV_IOT
+ network 10.31.40.0 255.255.255.0
+ default-router 10.31.40.1
+ dns-server 10.31.20.10
+ domain-name security-hub.lab
+ip dhcp pool GUESTS
+ network 10.31.50.0 255.255.255.0
+ default-router 10.31.50.1
+ dns-server 10.31.20.10
+ip dhcp pool SOC
+ network 10.31.60.0 255.255.255.0
+ default-router 10.31.60.1
+ dns-server 10.31.20.10
+ domain-name security-hub.lab
+
+ip access-list extended USERS-IN
+ permit udp any host 10.31.20.10 eq domain
+ permit udp any host 10.31.20.10 eq ntp
+ permit icmp 10.31.30.0 0.0.0.255 host 10.31.20.20 echo
+ permit tcp 10.31.30.0 0.0.0.255 host 10.31.20.20 eq 443
+ deny ip 10.31.30.0 0.0.0.255 10.31.0.0 0.0.255.255 log
+ permit ip 10.31.30.0 0.0.0.255 any
+ip access-list extended IOT-IN
+ permit udp any host 10.31.20.10 eq domain
+ permit udp any host 10.31.20.10 eq ntp
+ permit tcp host 10.31.40.40 host 10.31.20.20 eq 443
+ permit tcp host 10.31.40.31 host 10.31.20.21 established
+ permit tcp host 10.31.40.32 host 10.31.20.21 established
+ permit icmp 10.31.40.0 0.0.0.255 host 10.31.20.21 echo-reply
+ deny ip 10.31.40.0 0.0.0.255 10.31.0.0 0.0.255.255 log
+ deny ip any any log
+ip access-list extended GUESTS-IN
+ deny ip 10.31.50.0 0.0.0.255 10.31.0.0 0.0.255.255 log
+ permit ip 10.31.50.0 0.0.0.255 any
+ip access-list extended SOC-IN
+ permit udp any host 10.31.20.10 eq domain
+ permit udp any host 10.31.20.10 eq ntp
+ permit tcp 10.31.60.0 0.0.0.255 host 10.31.20.20 eq 443
+ permit tcp 10.31.60.0 0.0.0.255 host 10.31.20.21 eq 443
+ permit tcp 10.31.60.0 0.0.0.255 host 10.31.20.21 eq 8971
+ permit icmp 10.31.60.0 0.0.0.255 host 10.31.20.20
+ permit icmp 10.31.60.0 0.0.0.255 host 10.31.20.21
+ permit icmp 10.31.60.0 0.0.0.255 10.31.40.0 0.0.0.255
+ deny ip 10.31.60.0 0.0.0.255 10.31.0.0 0.0.255.255 log
+ permit ip 10.31.60.0 0.0.0.255 any
+
+logging host 10.31.20.10
+logging trap warnings
+ntp server 10.31.20.10
+line console 0
+ logging synchronous
+ exec-timeout 10 0
+line vty 0 4
+ login local
+ transport input ssh
+ exec-timeout 10 0
+end
+write memory
+

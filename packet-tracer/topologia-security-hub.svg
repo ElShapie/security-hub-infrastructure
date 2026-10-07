@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <defs>
+    <style>
+      text{font-family:Arial,sans-serif;fill:#132322} .title{font-size:32px;font-weight:700}.subtitle{font-size:16px;fill:#42504f}
+      .box{fill:#edf7f5;stroke:#132322;stroke-width:2;rx:14}.device{fill:#fff;stroke:#0e1a19;stroke-width:2;rx:10}
+      .network{fill:#132322;stroke:#3ddc91;stroke-width:3;rx:12}.networkText{fill:#fff;font-size:17px;font-weight:700}
+      .label{font-size:15px;font-weight:700}.small{font-size:13px}.link{stroke:#132322;stroke-width:3;fill:none}.trunk{stroke:#0b57d0;stroke-width:6;fill:none}.wifi{stroke:#7a5500;stroke-width:3;stroke-dasharray:8 6;fill:none}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#132322"/></marker>
+  </defs>
+  <rect width="1600" height="1000" fill="#fff"/>
+  <text x="70" y="60" class="title">Security Hub · Topología Cisco Packet Tracer</text>
+  <text x="70" y="90" class="subtitle">Dos switches · router-on-a-stick · segmentación 802.1Q · ACL con mínimo privilegio</text>
+
+  <rect x="650" y="120" width="300" height="80" class="network"/><text x="800" y="153" text-anchor="middle" class="networkText">NUBE / INTERNET</text><text x="800" y="178" text-anchor="middle" class="networkText">simulada</text>
+  <rect x="650" y="245" width="300" height="100" class="device"/><text x="800" y="283" text-anchor="middle" class="label">RTR-HUB-01 · Cisco 2911</text><text x="800" y="308" text-anchor="middle" class="small">Inter-VLAN · DHCP · ACL · Syslog/NTP</text>
+  <line x1="800" y1="200" x2="800" y2="245" class="link" marker-end="url(#arrow)"/>
+
+  <rect x="220" y="405" width="470" height="110" class="network"/><text x="455" y="448" text-anchor="middle" class="networkText">SW-CORE-01 · Cisco 2960</text><text x="455" y="475" text-anchor="middle" class="networkText">VLAN 10 / 20 / 60 · Gestión y servicios</text>
+  <rect x="910" y="405" width="470" height="110" class="network"/><text x="1145" y="448" text-anchor="middle" class="networkText">SW-ACCESS-01 · Cisco 2960</text><text x="1145" y="475" text-anchor="middle" class="networkText">VLAN 30 / 40 · Áreas y control físico</text>
+  <path d="M740 345 L550 405" class="trunk"/><text x="585" y="365" class="small">Trunk Gi0/1 · nativa 999</text>
+  <line x1="690" y1="460" x2="910" y2="460" class="trunk"/><text x="800" y="445" text-anchor="middle" class="small">Trunk Gi0/2 ↔ Gi0/1</text>
+
+  <rect x="70" y="585" width="230" height="110" class="box"/><text x="185" y="620" text-anchor="middle" class="label">VLAN 20 · Servidores</text><text x="185" y="647" text-anchor="middle" class="small">SRV-INFRA-01 · .10</text><text x="185" y="670" text-anchor="middle" class="small">VM-HUB-01 · .20</text><text x="185" y="691" text-anchor="middle" class="small">VM-NVR-01 · .21</text>
+  <rect x="330" y="585" width="230" height="110" class="box"/><text x="445" y="620" text-anchor="middle" class="label">VLAN 10 · Administración</text><text x="445" y="647" text-anchor="middle" class="small">TI · IAM</text><text x="445" y="670" text-anchor="middle" class="small">Respaldo · gestión de red</text>
+  <rect x="590" y="585" width="230" height="110" class="box"/><text x="705" y="620" text-anchor="middle" class="label">VLAN 60 · SOC</text><text x="705" y="647" text-anchor="middle" class="small">Analistas y responsable</text><text x="705" y="670" text-anchor="middle" class="small">Consulta Hub, NVR y cámaras</text>
+  <line x1="300" y1="585" x2="390" y2="515" class="link"/><line x1="445" y1="585" x2="455" y2="515" class="link"/><line x1="705" y1="585" x2="520" y2="515" class="link"/>
+
+  <rect x="880" y="585" width="260" height="110" class="box"/><text x="1010" y="620" text-anchor="middle" class="label">VLAN 30 · Usuarios</text><text x="1010" y="646" text-anchor="middle" class="small">Dirección · RRHH</text><text x="1010" y="668" text-anchor="middle" class="small">Seguridad Física · Auditoría</text>
+  <rect x="1170" y="585" width="260" height="110" class="box"/><text x="1300" y="620" text-anchor="middle" class="label">VLAN 40 · CCTV / IoT</text><text x="1300" y="646" text-anchor="middle" class="small">RFID-CTRL-01 · .40</text><text x="1300" y="668" text-anchor="middle" class="small">CAM-IP-01/.31 · CAM-IP-02/.32</text>
+  <line x1="1010" y1="585" x2="1075" y2="515" class="link"/><line x1="1300" y1="585" x2="1215" y2="515" class="link"/>
+
+  <rect x="560" y="770" width="480" height="110" class="device"/><text x="800" y="805" text-anchor="middle" class="label">AP-LAB-01 · SSID por VLAN</text><text x="800" y="833" text-anchor="middle" class="small">LAB-USUARIOS 30 · LAB-CAMARAS 40 · LAB-INVITADOS 50 · LAB-SOC 60</text><text x="800" y="858" text-anchor="middle" class="small">En Packet Tracer pueden usarse AP separados si el modelo no etiqueta SSID</text>
+  <path d="M455 515 L650 770" class="trunk"/><path d="M1040 770 L1300 695" class="wifi"/><path d="M900 770 L1010 695" class="wifi"/><path d="M700 770 L705 695" class="wifi"/>
+
+  <rect x="70" y="790" width="350" height="90" class="box"/><text x="245" y="825" text-anchor="middle" class="label">VLAN 50 · Invitados</text><text x="245" y="852" text-anchor="middle" class="small">Internet simulado · redes internas bloqueadas</text>
+  <path d="M420 835 L560 835" class="wifi"/>
+
+  <rect x="70" y="920" width="1460" height="50" class="network"/><text x="800" y="951" text-anchor="middle" class="networkText">VLAN 999 · PARKING_NATIVE · sin DHCP · puertos sin uso apagados</text>
+</svg>
