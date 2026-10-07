@@ -27,6 +27,17 @@ Esta carpeta contiene la topología lógica y las configuraciones listas para pe
 - [`configs/SW-ACCESS-01.txt`](configs/SW-ACCESS-01.txt): switch de acceso.
 - [`topologia-security-hub.svg`](topologia-security-hub.svg): diagrama editable.
 - [`topologia-security-hub.svg`](topologia-security-hub.svg): imagen vectorial para la presentación.
+- [`topologia-interactiva/index.html`](topologia-interactiva/index.html): visor web con equipos seleccionables, configuraciones, cableado por área y simulador de ACL.
+
+## Abrir la topología interactiva
+
+Desde esta carpeta ejecuta:
+
+```bash
+python3 -m http.server 8080
+```
+
+Después abre `http://localhost:8080/topologia-interactiva/`. El servidor local permite cargar los archivos de configuración Cisco cuando se selecciona un switch o el router.
 
 ## Archivo `.pkt`
 

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'">
+  <title>Topología interactiva · Security Hub</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Laboratorio Security Hub</p>
+      <h1>Topología y cableado estructurado</h1>
+      <p class="lede">Explora equipos, VLAN, configuraciones, conexiones y rutas de reporte sin datos personales.</p>
+    </div>
+    <div class="status-block"><span class="live-dot"></span><strong>Diseño validado</strong><small>2 switches · 7 VLAN · 34 puestos EMP</small></div>
+  </header>
+
+  <nav class="view-tabs" aria-label="Vistas de la topología">
+    <button class="tab active" data-view="logical" aria-pressed="true">Topología lógica</button>
+    <button class="tab" data-view="cabling" aria-pressed="false">Cableado por área</button>
+    <button class="tab" data-view="departments" aria-pressed="false">Departamentos y administración</button>
+    <button class="tab" data-view="tests" aria-pressed="false">Simular comunicación</button>
+  </nav>
+
+  <main>
+    <section id="logical" class="view active" aria-labelledby="logical-title">
+      <div class="section-heading"><div><p class="eyebrow">Vista lógica</p><h2 id="logical-title">Red segmentada</h2></div><p>Selecciona un equipo para consultar puertos, dirección, función y configuración.</p></div>
+      <div class="vlan-filter" aria-label="Filtrar por VLAN"></div>
+      <div class="network-stage" aria-label="Diagrama interactivo de red">
+        <svg class="links" viewBox="0 0 1200 720" preserveAspectRatio="none" aria-hidden="true">
+          <path data-vlans="all" d="M600 88V150"/><path class="trunk" data-vlans="all" d="M600 218L350 294"/>
+          <path class="trunk" data-vlans="all" d="M490 335H710"/><path data-vlans="20" d="M300 380L145 475"/>
+          <path data-vlans="10" d="M350 380L355 475"/><path data-vlans="60" d="M405 380L565 475"/>
+          <path data-vlans="30" d="M810 380L785 475"/><path data-vlans="40" d="M865 380L1010 475"/>
+          <path class="trunk" data-vlans="30 40 50 60" d="M490 352L600 590"/>
+          <path class="wireless" data-vlans="30" d="M650 625L785 552"/><path class="wireless" data-vlans="40" d="M680 632L1010 552"/>
+        </svg>
+        <button class="device internet" data-device="internet">Nube / Internet<small>Salida simulada</small></button>
+        <button class="device router" data-device="router">RTR-HUB-01<small>2911 · Inter-VLAN + ACL</small></button>
+        <button class="device core" data-device="core">SW-CORE-01<small>2960 · núcleo</small></button>
+        <button class="device access" data-device="access">SW-ACCESS-01<small>2960 · acceso</small></button>
+        <button class="device group servers" data-device="servers" data-vlan="20">VLAN 20 · Servidores<small>Infra · Hub · NVR</small></button>
+        <button class="device group admin" data-device="admin" data-vlan="10">VLAN 10 · Administración<small>TI · IAM · respaldo</small></button>
+        <button class="device group soc" data-device="soc" data-vlan="60">VLAN 60 · SOC<small>Monitoreo y respuesta</small></button>
+        <button class="device group users" data-device="users" data-vlan="30">VLAN 30 · Usuarios<small>Dirección · RRHH · Física · Auditoría</small></button>
+        <button class="device group iot" data-device="iot" data-vlan="40">VLAN 40 · CCTV / IoT<small>Cámaras · RFID/NFC</small></button>
+        <button class="device ap" data-device="ap">AP-LAB-01<small>SSID por VLAN</small></button>
+        <div class="parking">VLAN 999 · PARKING_NATIVE · sin DHCP · puertos apagados</div>
+      </div>
+    </section>
+
+    <section id="cabling" class="view" aria-labelledby="cabling-title">
+      <div class="section-heading"><div><p class="eyebrow">Plano físico</p><h2 id="cabling-title">Cableado estructurado por área</h2></div><p>La ruta estándar es rack → patch panel → switch → roseta → equipo.</p></div>
+      <div class="cabling-layout">
+        <aside class="rack-card">
+          <h3>Rack principal · TI</h3>
+          <ol class="rack-units">
+            <li><span>U01</span> UPS</li><li><span>U02</span> Router RTR-HUB-01</li><li><span>U03</span> SW-CORE-01</li>
+            <li><span>U04</span> Patch panel PP-A</li><li><span>U05</span> Organizador horizontal</li><li><span>U06</span> Host de virtualización</li>
+          </ol>
+          <h3>Rack secundario</h3>
+          <ol class="rack-units"><li><span>U01</span> SW-ACCESS-01</li><li><span>U02</span> Patch panel PP-B</li><li><span>U03</span> Organizador</li></ol>
+        </aside>
+        <div class="cable-content">
+          <div class="area-selector" aria-label="Seleccionar área"></div>
+          <article id="cable-detail" class="detail-card" aria-live="polite"></article>
+          <div class="cable-route" aria-label="Ruta del cable"><span>Equipo</span><b>Cat6</b><span>Roseta</span><b>Cat6 horizontal</b><span>Patch panel</span><b>Patch cord</b><span>Switch</span></div>
+          <div class="table-wrap"><table><thead><tr><th>Etiqueta</th><th>Área</th><th>Patch panel</th><th>Switch / puerto</th><th>VLAN</th><th>Cable</th></tr></thead><tbody id="cable-table"></tbody></table></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="departments" class="view" aria-labelledby="departments-title">
+      <div class="section-heading"><div><p class="eyebrow">Organización</p><h2 id="departments-title">Dominios del documento y administraciones</h2></div><p>Las áreas con el mismo texto entre paréntesis comparten departamento, pero conservan responsables, tareas y permisos separados.</p></div>
+      <div id="department-grid" class="department-grid"></div>
+      <article class="relationship-card">
+        <h3>Relación especial SOC + IAM</h3>
+        <p>SOC e IAM son administraciones distintas. IAM pertenece organizativamente al conjunto SOC–IAM: IAM administra identidades y SOC vigila los eventos. Cada responsable aprueba únicamente las actividades de su administración.</p>
+        <div class="org-flow"><span>Dirección / DPO</span><b>→</b><span>SOC · EMP-019</span><b>→</b><span>IAM · EMP-014</span></div>
+      </article>
+    </section>
+
+    <section id="tests" class="view" aria-labelledby="tests-title">
+      <div class="section-heading"><div><p class="eyebrow">Comprobación</p><h2 id="tests-title">Simulador de flujos</h2></div><p>Comprueba la intención de las ACL antes de cablear. Es una guía; la prueba definitiva se hace en Packet Tracer.</p></div>
+      <form id="flow-form" class="flow-form">
+        <label>Origen<select name="source"></select></label><label>Destino<select name="destination"></select></label>
+        <label>Servicio<select name="service"><option value="https">HTTPS</option><option value="ssh">SSH</option><option value="icmp">Ping / ICMP</option><option value="nvr">NVR 8971</option><option value="dns">DNS</option></select></label>
+        <button type="submit">Evaluar flujo</button>
+      </form>
+      <article id="flow-result" class="flow-result neutral" aria-live="polite"><strong>Selecciona un origen, destino y servicio.</strong><p>Se mostrará la regla prevista y la prueba que debes ejecutar.</p></article>
+      <div class="test-list"><h3>Pruebas recomendadas</h3><ul><li>Usuario → Hub por HTTPS: permitido.</li><li>Usuario → cámara: bloqueado.</li><li>SOC → NVR: permitido.</li><li>RFID → Hub por HTTPS: permitido.</li><li>RFID → RRHH: bloqueado.</li><li>Invitado → cualquier red interna: bloqueado.</li></ul></div>
+    </section>
+  </main>
+
+  <dialog id="device-dialog" aria-labelledby="device-title">
+    <div class="dialog-head"><div><p id="device-kind" class="eyebrow"></p><h2 id="device-title"></h2></div><button id="close-dialog" class="icon-button" aria-label="Cerrar">×</button></div>
+    <div class="device-tabs" role="tablist"><button class="device-tab active" data-panel="summary">Resumen</button><button class="device-tab" data-panel="ports">Puertos y enlaces</button><button class="device-tab" data-panel="config">Configuración</button></div>
+    <div id="device-content"></div>
+  </dialog>
+
+  <footer><p>Diseño sanitizado · Identificadores EMP · Sin nombres, credenciales ni UID reales</p></footer>
+  <script src="app.js" defer></script>
+</body>
+</html>

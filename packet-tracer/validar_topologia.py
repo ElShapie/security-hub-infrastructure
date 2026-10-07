@@ -31,6 +31,11 @@ def main() -> None:
         for fragment in ("switchport trunk native vlan 999", "switchport nonegotiate", "spanning-tree bpduguard enable", "transport input ssh"):
             require(text, fragment, source)
 
+    for fragment in ("interface range fastEthernet0/6-12", "interface range fastEthernet0/13-18", "interface range fastEthernet0/19-23"):
+        require(core, fragment, "SW-CORE-01")
+    for fragment in ("interface range fastEthernet0/1-18", "interface fastEthernet0/19", "interface range fastEthernet0/20-24"):
+        require(access, fragment, "SW-ACCESS-01")
+
     for acl in ("USERS-IN", "IOT-IN", "GUESTS-IN", "SOC-IN"):
         require(router, f"ip access-list extended {acl}", "RTR-HUB-01")
     for fragment in ("ip dhcp pool ADMIN", "ip dhcp pool SERVERS", "ip dhcp pool USERS", "ip dhcp pool CCTV_IOT", "ip dhcp pool GUESTS", "ip dhcp pool SOC"):

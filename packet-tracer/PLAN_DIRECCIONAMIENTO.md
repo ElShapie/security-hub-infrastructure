@@ -41,9 +41,10 @@ DNS, NTP y Syslog apuntan a `10.31.20.10`. Los clientes usan DHCP desde `.100` h
 | Fa0/3 | Access | 20 | VM-NVR-01 |
 | Fa0/4 | Access | 10 | VM-RESPALDO-01 |
 | Fa0/5 | Trunk | 30,40,50,60; nativa 999 | AP-LAB-01 o WLC |
-| Fa0/6–11 | Access | 10 | TI e IAM |
-| Fa0/12–17 | Access | 60 | SOC |
-| Fa0/18–24 | Parking | 999 | Apagados |
+| Fa0/6–12 | Access | 10 | TI |
+| Fa0/13–18 | Access | 10 | IAM |
+| Fa0/19–23 | Access | 60 | SOC |
+| Fa0/24 | Parking | 999 | Apagado |
 
 ### SW-ACCESS-01
 
@@ -55,4 +56,3 @@ DNS, NTP y Syslog apuntan a `10.31.20.10`. Los clientes usan DHCP desde `.100` h
 | Fa0/20–24 | Parking | 999 | Apagados |
 
 Los teléfonos-cámara se conectan por el SSID de VLAN 40. Si el AP simulado no admite VLAN por SSID, usa cuatro AP de Packet Tracer, uno por cada VLAN inalámbrica, y documenta que representan un único AP real con múltiples SSID.
-
