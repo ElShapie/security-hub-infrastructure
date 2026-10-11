@@ -1,0 +1,17 @@
+{% macro sidebar(active, user, role, csrf, camera_url) %}
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<aside class="sidebar" aria-label="Security Hub operativo">
+  <div><span class="eyebrow">Consola operativa</span><h2>Security Hub</h2></div>
+  <details open><summary class="navigation-toggle">Menú de navegación</summary>
+    <nav aria-label="Navegación principal">
+      <a href="/" {% if active == 'resumen' %}class="active" aria-current="page"{% endif %}>Resumen</a>
+      <a href="/#infraestructura">Infraestructura</a>
+      <a href="/control-acceso" {% if active == 'acceso' %}class="active" aria-current="page"{% endif %}>Personas y tarjetas</a>
+      <a href="/#accesos">Acceso físico</a>
+      <a href="/hub" {% if active == 'soc' %}class="active" aria-current="page"{% endif %}>SOC e incidentes</a>
+      {% if camera_url %}<a href="{{ camera_url }}" target="_blank" rel="noopener">Videovigilancia · externa</a>{% endif %}
+    </nav>
+    <div class="account"><strong>{{ user.externalId or 'Cuenta autorizada' }}</strong><span>{{ role }}</span><form action="/logout" method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="link-button">Cerrar sesión</button></form></div>
+  </details>
+</aside>
+{% endmacro %}

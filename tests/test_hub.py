@@ -58,5 +58,25 @@ class HubIntegrationTest(unittest.TestCase):
         self.assertNotIn('uid_hash', self.web.store.cards()[0])
         self.assertNotIn('DEADBEEF', str(self.web.store.cards()))
 
+    def test_visual_shell_and_forms_preserved(self):
+        user = self.web.store.save({'userName':'admin@example.test','externalId':'EMP-001','title':'admin','active':True})
+        self.login(user)
+        for route in ('/', '/control-acceso', '/hub'):
+            response = self.client.get(route)
+            self.assertEqual(response.status_code, 200)
+            text = response.get_data(as_text=True)
+            self.assertIn('Navegación principal', text)
+            self.assertIn('id="contenido"', text)
+            self.assertIn('aria-current="page"', text)
+            self.assertIn('name="csrf"', text)
+            self.assertNotIn('OneLogin activo', text)
+        self.assertIn('action="/tarjetas"', self.client.get('/control-acceso').get_data(as_text=True))
+
+    def test_consulta_still_denied_restricted_views(self):
+        user = self.web.store.save({'userName':'consulta@example.test','externalId':'EMP-002','title':'consulta','active':True})
+        self.login(user)
+        self.assertEqual(self.client.get('/').status_code, 200)
+        self.assertEqual(self.client.get('/control-acceso').status_code, 403)
+
 if __name__ == '__main__':
     unittest.main()

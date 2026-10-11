@@ -1,12 +1,9 @@
 {% extends "base.html" %}
+{% from "navigation.html" import sidebar %}
 {% block body %}
-<aside class="sidebar">
-  <div><span class="eyebrow">Consola operativa</span><h2>Security Hub</h2></div>
-  <nav><a class="active" href="/">Resumen</a><a href="#infraestructura">Infraestructura</a><a href="/control-acceso">Personas y tarjetas</a><a href="#accesos">Acceso físico</a><a href="/hub">SOC e incidentes</a>{% if camera_url %}<a href="{{ camera_url }}" target="_blank" rel="noopener">Videovigilancia</a>{% endif %}</nav>
-  <div class="account"><strong>{{ user.externalId or user.userName }}</strong><span>{{ current_role }}</span><form action="/logout" method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="link-button">Cerrar sesión</button></form></div>
-</aside>
-<main class="main">
-  <header class="topbar"><div><span class="eyebrow">Operación en tiempo real</span><h1>Estado general</h1></div><span class="chip ok">OneLogin activo</span></header>
+{{ sidebar('resumen', user, current_role, csrf, camera_url) }}
+<main class="main" id="contenido" tabindex="-1">
+  <header class="topbar"><div><span class="breadcrumb">Security Hub / Operación</span><h1>Estado general</h1><p>Identidades, infraestructura y respuesta a incidentes.</p></div><span class="chip">Acceso mediante OneLogin</span></header>
   <section class="metrics">
     <article class="metric"><span>Identidades activas</span><strong>{{ metrics.users_active }}</strong></article>
     <article class="metric"><span>Servicios disponibles</span><strong>{{ metrics.devices_online }}/{{ metrics.devices_total }}</strong></article>

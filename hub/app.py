@@ -165,7 +165,8 @@ def admin():
 @allowed('hub')
 def hub():
     return render_template('hub.html', events=store.events(), access_events=store.access_events(),
-                           incidents=store.incidents(), camera_url=camera_url)
+                           incidents=store.incidents(), camera_url=camera_url, user=store.get(session['uid']),
+                           current_role=store.effective_role(session['uid']), csrf=session['csrf'])
 
 
 @app.get('/control-acceso')
@@ -173,7 +174,7 @@ def hub():
 def access_control():
     uid = session['uid']
     return render_template('access_control.html', user=store.get(uid), current_role=store.effective_role(uid),
-                           csrf=session['csrf'], users=store.users_with_access(), cards=store.cards(), roles=sorted(PERMISSIONS))
+                           csrf=session['csrf'], users=store.users_with_access(), cards=store.cards(), roles=sorted(PERMISSIONS), camera_url=camera_url)
 
 
 @app.post('/usuarios/<user_id>/rol')
