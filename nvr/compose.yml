@@ -15,7 +15,7 @@ services:
         tmpfs:
           size: 268435456
     ports:
-      - "10.31.0.20:8971:8971"
+      - "${NVR_BIND_IP:?Configure la IP de esta VM NVR en el .env privado}:8971:8971"
     environment:
       FRIGATE_CAM_ANDROID_USER: ${FRIGATE_CAM_ANDROID_USER}
       FRIGATE_CAM_ANDROID_PASSWORD: ${FRIGATE_CAM_ANDROID_PASSWORD}

@@ -47,3 +47,10 @@ Los diagramas muestran el diseño objetivo con equipos administrables. Si el har
 ## Diligencias actualizadas
 
 La asignación técnica por EMP, las rutas de coordinación y el registro mínimo de cada cambio están en [docs/DILIGENCIAS_POR_AREA.md](docs/DILIGENCIAS_POR_AREA.md).
+
+## Inicio simplificado por VM
+
+Usa [Inicio rápido](docs/INICIO_RAPIDO_VM.md): `vm-hub.sh`, `vm-nvr.sh` y
+`vm-respaldo.sh` dentro de Linux. OneLogin, cámaras, red, certificados y respaldo
+se completan aparte en [Configuración manual](docs/CONFIGURACION_MANUAL.md).
+Los maestros preservan runtimes existentes y no instalan ni mezclan el dashboard DPO.

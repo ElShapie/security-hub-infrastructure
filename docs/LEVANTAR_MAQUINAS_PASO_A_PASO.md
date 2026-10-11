@@ -1,5 +1,10 @@
 # Levantar las máquinas virtuales y los servidores operativos
 
+> Entrada recomendada actual: [Inicio rápido por VM](INICIO_RAPIDO_VM.md) y
+> [Configuración manual](CONFIGURACION_MANUAL.md). Esta guía conserva el detalle
+> original. Para NVR ahora debe configurar NVR_BIND_IP en el .env privado con la IP
+> de VM-NVR-01. No use `docker compose config` sin `--quiet` en capturas: expande secretos.
+
 Esta guía construye el entorno desde cero. Los ejemplos usan una red privada `10.31.0.0/24` y Ubuntu Server 24.04 LTS. Cambia las direcciones si chocan con la red del salón. No uses nombres, correos, tarjetas ni contraseñas reales en capturas o commits.
 
 ## 1. Resultado esperado
